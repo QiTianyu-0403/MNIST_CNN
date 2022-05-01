@@ -50,5 +50,8 @@ def init(args):
 
     # Define loss functions and optimization
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(net.parameters(), lr=args.learning_rate, momentum=0.9, weight_decay=5e-4)
+    # optimizer = optim.SGD(net.parameters(), lr=args.learning_rate, momentum=0.9, weight_decay=5e-4)
+    # optimizer = optim.Adagrad(net.parameters(), lr=args.learning_rate, weight_decay=5e-4)
+    # optimizer = optim.Adam(net.parameters(), lr=args.learning_rate, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
+    optimizer = optim.RMSprop(net.parameters(), lr=args.learning_rate, alpha=0.99, eps=1e-08, weight_decay=0, momentum=0, centered=False)
     return device, trainloader, testloader, net, criterion, optimizer, train_data_num, test_data_num

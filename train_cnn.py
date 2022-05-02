@@ -27,6 +27,13 @@ def train_cnn(args):
                     outputs = net(inputs)
                     loss = criterion(outputs, labels)
                     loss.backward()
+                    # for name, parms in net.named_parameters():	
+                    #     print('-->name:', name, '-->grad_requirs:',parms.requires_grad, \
+                    #         ' -->grad_value:',parms.grad)
+                    grad1 = net.conv2.bias.grad
+                    grad2 = net.conv2.weight.grad
+                    grad3 = net.fc2.bias.grad
+                    grad4 = net.fc2.weight.grad
                     optimizer.step()
 
                     # 每训练1个batch打印一次loss和准确率
@@ -41,6 +48,16 @@ def train_cnn(args):
                     f2.write('\n')
                     f2.flush()
 
+                # print("conv21.bias.grad = ",net.conv2.bias.grad)
+                # print("conv21.weight.grad = ",net.conv2.weight.grad)
+                conv2_bias_grad = grad1
+                conv2_weight_grad = grad2
+                fc2_bias_grad = grad3
+                fc2_weight_grad = grad4
+                norm_1 = torch.norm(conv2_bias_grad) * 100
+                norm_2 = torch.norm(conv2_weight_grad) * 100
+                norm_3 = torch.norm(fc2_bias_grad) * 100
+                norm_4 = torch.norm(fc2_weight_grad) * 100
                 # 每训练完一个epoch测试一下准确率
                 print("Waiting Test!")
                 with torch.no_grad():
@@ -60,7 +77,7 @@ def train_cnn(args):
                     # 将每次测试结果实时写入acc.txt文件中
                     # print('Saving model......')
                     # torch.save(net.state_dict(), '%s/net_%03d.pth' % (args.outf, epoch + 1))
-                    f.write("EPOCH=%03d,Accuracy= %.3f%%" % (epoch + 1, acc))
+                    f.write("EPOCH=%03d,Accuracy= %.3f%%,%.3f%%,%.3f%%,%.3f%%,%.3f%%" % (epoch + 1, acc, norm_1, norm_2, norm_3, norm_4))
                     f.write('\n')
                     f.flush()
 

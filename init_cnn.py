@@ -47,7 +47,6 @@ def init(args):
     trainloader, testloader, train_data_num, test_data_num = load_data(args)
 
     net = CNN().to(device)
-    summary(net, (1, 28, 28))
 
     # Define loss functions and optimization
     criterion = nn.CrossEntropyLoss()
